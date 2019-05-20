@@ -107,54 +107,54 @@ String AESLib::encrypt(String msg, byte key[], byte my_iv[]) {
 void AESLib::encrypt64(char * msg, char * output, byte key[], byte my_iv[]) {
 
 #ifdef AES_DEBUG
-  Serial.print("incoming msg: "); Serial.println(msg);
-  Serial.print("incoming k-size: "); Serial.println(sizeof(key));
-  Serial.print("incoming v-size: "); Serial.println(sizeof(my_iv));
+//  Serial.print("incoming msg: "); Serial.println(msg);
+//  Serial.print("incoming k-size: "); Serial.println(sizeof(key));
+//  Serial.print("incoming v-size: "); Serial.println(sizeof(my_iv));
 #endif
 
   aes.set_key(key, sizeof(key));
 
   int msgLen = strlen(msg);
 #ifdef AES_DEBUG
-  Serial.println("- msgLen");
+//  Serial.println("- msgLen");
 #endif
 
   char b64data[base64_enc_len(msgLen)];
 #ifdef AES_DEBUG
-  Serial.println("- b64data");
+//  Serial.println("- b64data");
 #endif
 
   int b64len = base64_encode(b64data, (char*)msg, msgLen);
 #ifdef AES_DEBUG
-  Serial.println("- b64len");
+//  Serial.println("- b64len");
 #endif
 
   int paddedLen = b64len + (N_BLOCK - (b64len % N_BLOCK)) + 1;
 #ifdef AES_DEBUG
-  Serial.println("- paddedLen");
+//  Serial.println("- paddedLen");
 #endif
 
   byte padded[paddedLen];
   aes.padPlaintext(b64data, padded);
 #ifdef AES_DEBUG
-  Serial.println("- padPlaintext");
+//  Serial.println("- padPlaintext");
 #endif
 
   byte cipher[2*b64len];
   aes.do_aes_encrypt((byte *)padded, paddedLen, cipher, key, 128, my_iv);
 #ifdef AES_DEBUG
-  Serial.println("- do_aes_encrypt");
+//  Serial.println("- do_aes_encrypt");
 #endif
 
   char out2[4*b64len];
   base64_encode(out2, (char *)cipher, aes.get_size() );
 #ifdef AES_DEBUG
-  Serial.println("- base64_encode");
+//  Serial.println("- base64_encode");
 #endif
 
   strcpy(output, (char*)out2);
 #ifdef AES_DEBUG
-  Serial.println("- strcpy");
+//  Serial.println("- strcpy");
 #endif
 }
 
